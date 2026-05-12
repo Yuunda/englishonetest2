@@ -179,6 +179,74 @@ window.onload = function () {
 };
 
 document.getElementById('examForm').addEventListener('submit', () => localStorage.removeItem(timerKey));
+
+document.addEventListener('contextmenu', event => event.preventDefault()); // Disable Klik Kanan
+
+
+//3. FITUR TIDAK BOLEH COPAS
+    document.addEventListener('keydown', function(e) {
+        // Disable F12, Ctrl+Shift+I, Ctrl+U (Inspect Element)
+        if (e.keyCode == 123 || (e.ctrlKey && e.shiftKey && e.keyCode == 73) || (e.ctrlKey && e.keyCode == 85)) {
+            e.preventDefault();
+        }
+
+        // Disable Ctrl+C dan Ctrl+V
+        if (e.ctrlKey && (e.keyCode === 67 || e.keyCode === 86)) {
+            e.preventDefault();
+            alert('Fitur Copy-Paste dilarang selama ujian!');
+        }
+    });
+
+
+// 4. FITUR ANTI-CHEAT: RADICAL PROTECTION
+const examContainer = document.querySelector('.container');
+
+function setBlur(isBlur) {
+    if (isBlur) {
+        examContainer.classList.add('blur-active');
+    } else {
+        examContainer.classList.remove('blur-active');
+    }
+}
+
+// STRATEGI A: Deteksi Visibilitas (Paling Ampuh buat Win+Shift+S)
+document.addEventListener("visibilitychange", function() {
+    if (document.hidden) {
+        setBlur(true);
+    } else {
+        // Kasih delay dikit pas balik biar gak curi-curi pandang
+        setTimeout(() => setBlur(false), 500);
+    }
+});
+
+// STRATEGI B: Deteksi Keydown (Bukan Keyup!)
+// Kita pakai keydown supaya blur jalan SEBELUM tombol dilepas
+document.addEventListener('keydown', function(e) {
+    // Deteksi PrintScreen (key: "PrintScreen" atau keyCode: 44)
+    // Deteksi Win+Shift+S (Meta/Win + Shift + S)
+    if (e.key === "PrintScreen" || (e.metaKey && e.shiftKey && e.key === "S") || (e.ctrlKey && e.shiftKey && e.key === "S")) {
+        setBlur(true);
+        navigator.clipboard.writeText('Dilarang Screenshot!');
+        
+        // Paksa blur selama 3 detik kalau mereka nekat
+        setTimeout(() => setBlur(false), 3000);
+    }
+});
+
+// STRATEGI C: Deteksi Mouse Keluar Jendela Browser
+document.addEventListener("mouseleave", function(e) {
+    setBlur(true);
+});
+document.addEventListener("mouseenter", function(e) {
+    setBlur(false);
+});
+
+// STRATEGI D: Polling Fokus yang Lebih Galak
+setInterval(() => {
+    if (!document.hasFocus()) {
+        setBlur(true);
+    }
+}, 100); // Cek tiap 0.1 detik
 </script>
 
 <style>
@@ -187,5 +255,24 @@ document.getElementById('examForm').addEventListener('submit', () => localStorag
     .form-check-input:checked { background-color: #17a2b8; border-color: #17a2b8; }
     .form-check-label { cursor: pointer; width: 100%; }
     audio::-webkit-media-controls-enclosure { border-radius: 5px; }
+
+    /* CSS untuk efek blur */
+    .blur-active {
+        filter: blur(20px); /* Semakin besar angkanya, semakin tidak terbaca */
+        transition: filter 0.3s ease-in-out;
+        pointer-events: none; /* Supaya tidak bisa diklik saat blur */
+        user-select: none;    /* Supaya teks tidak bisa di-highlight */
+    }
+
+    /* Sembunyikan soal secara default */
+.question-card {
+    filter: blur(8px);
+    transition: filter 0.2s ease;
+}
+
+/* Hanya perlihatkan soal yang sedang disorot mouse */
+.question-card:hover {
+    filter: blur(0);
+}
 </style>
 @endsection
