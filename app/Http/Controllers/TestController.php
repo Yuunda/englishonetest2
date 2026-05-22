@@ -22,10 +22,12 @@ class TestController extends Controller
 {
     // 1. Validasi
     $request->validate([
-        'name' => 'required',
-        'level' => 'required',
+        // Kunci value name agar hanya menerima string yang ada di dalam rules 'in:'
+        'name' => 'required|string|in:Pre-Test,Mid-Test,Post-Test',
+        'level' => 'required|in:kinder,elementary,middle,high,adult',
         'class' => 'required|integer',
-        'duration' => 'required|integer',
+        // Kunci durasi minimal 5 menit, maksimal 180 menit
+        'duration' => 'required|integer|min:5|max:180',
         'file_excel' => 'required|mimes:xlsx,xls',
         'images_archive' => 'nullable|file|mimes:zip' // Pakai zip saja
     ]);

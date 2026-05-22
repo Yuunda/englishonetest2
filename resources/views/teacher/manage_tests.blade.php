@@ -17,7 +17,13 @@
             
             <div style="margin-bottom: 15px;">
                 <label>Test Name:</label><br>
-                <input type="text" name="name" placeholder="Ex: Pre-Test" style="width: 100%; padding: 8px;" required>
+                <select name="name" style="width: 100%; padding: 8px;" required>
+                    <option value="">-- Select Test Type --</option>
+                    <option value="Pre-Test">Pre-Test</option>
+                    <option value="Mid-Test">Mid-Test</option>
+                    <option value="Post-Test">Post-Test</option>
+                    <!-- Tambahkan opsi lain di sini jika Ms. Septi butuh tipe tes tambahan -->
+                </select>
             </div>
 
             <div style="margin-bottom: 15px;">
@@ -40,7 +46,9 @@
 
             <div style="margin-bottom: 15px;">
                 <label>Duration (Minutes):</label><br>
-                <input type="number" name="duration" placeholder="Ex: 60" style="width: 100%; padding: 8px;" required>
+                <!-- Tambahkan limit min="5" dan max="180" (misal maksimal 3 jam) -->
+                <input type="number" name="duration" placeholder="Ex: 60" min="5" max="180" style="width: 100%; padding: 8px;" required>
+                <small style="color: #666; font-size: 12px;">*Batas durasi: 5 - 180 menit</small>
             </div>
 
             <div style="margin-bottom: 20px;">
