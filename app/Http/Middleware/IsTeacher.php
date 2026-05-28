@@ -5,17 +5,18 @@ namespace App\Http\Middleware;
 use Closure;
 use Illuminate\Http\Request;
 use Symfony\Component\HttpFoundation\Response;
+use Illuminate\Support\Facades\Auth; // WAJIB ADA
 
 class IsTeacher
 {
-    /**
-     * Handle an incoming request.
-     *
-     * @param  \Closure(\Illuminate\Http\Request): (\Symfony\Component\HttpFoundation\Response)  $next
-     */
     public function handle(Request $request, Closure $next): Response
     {
-        if (auth()->user()->role !== 'teacher') abort(403, 'Akses Ditolak. Anda bukan Guru.');
-        return $next($request);
+        // Cek jika user login DAN rolenya 'teacher'
+        if (Auth::check() && Auth::user()->role === 'teacher') {
+            return $next($request);
+        }
+
+        // Kalau bukan, lempar error 403
+        abort(403, 'Akses Ditolak. Anda bukan Guru.');
     }
 }

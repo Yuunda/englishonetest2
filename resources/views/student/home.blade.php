@@ -52,26 +52,28 @@
     <h1 class="title-heading">Pick One Based on Your Current Class-Level</h1>
 
     <div class="container">
-        <div class="level-row mb-4">
-            <a href="{{ route('student.classes', 'kinder') }}" class="btn-level kinder shadow-sm">
-                Kinder-Level
-            </a>
-            <a href="{{ route('student.classes', 'elementary') }}" class="btn-level elementary shadow-sm">
-                Elementary-Level
-            </a>
-            <a href="{{ route('student.classes', 'middle') }}" class="btn-level middle shadow-sm">
-                Middle-Level
-            </a>
-        </div>
+        {{-- Contoh perbaikan untuk tombol level --}}
+<div class="level-row mb-4">
+    @if(auth()->user()->hasAccess('kinder'))
+        <a href="{{ route('student.classes', 'kinder') }}" class="btn-level kinder shadow-sm">Kinder-Level</a>
+    @endif
+    
+    @if(auth()->user()->hasAccess('elementary'))
+        <a href="{{ route('student.classes', 'elementary') }}" class="btn-level elementary shadow-sm">Elementary-Level</a>
+    @endif
+    
+    @if(auth()->user()->hasAccess('middle'))
+        <a href="{{ route('student.classes', 'middle') }}" class="btn-level middle shadow-sm">Middle-Level</a>
+    @endif
 
-        <div class="level-row">
-            <a href="{{ route('student.classes', 'high') }}" class="btn-level high shadow-sm">
-                High-Level
-            </a>
-            <a href="{{ route('student.classes', 'adult') }}" class="btn-level adult shadow-sm">
-                Adult-Level
-            </a>
-        </div>
-    </div>
+    @if(auth()->user()->hasAccess('high'))
+        <a href="{{ route('student.classes', 'high') }}" class="btn-level high shadow-sm">High-Level</a>
+    @endif
+
+    @if(auth()->user()->hasAccess('adult'))
+        <a href="{{ route('student.classes', 'adult') }}" class="btn-level adult shadow-sm">Adult-Level</a>
+    @endif
+</div>
+{{-- Lakukan hal yang sama untuk High dan Adult --}}
 </div>
 @endsection

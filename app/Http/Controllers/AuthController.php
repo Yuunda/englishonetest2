@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Hash; // Pastikan ini ada di paling atas file
 
 class AuthController extends Controller
 {
@@ -27,7 +28,10 @@ class AuthController extends Controller
             $request->session()->regenerate();
 
             // Cek role untuk menentukan arah redirect
-            if (Auth::user()->role === 'teacher') {
+            $role = Auth::user()->role;
+            if ($role === 'admin') {
+                return redirect()->route('admin.dashboard'); // Nanti kita buat
+            } elseif ($role === 'teacher') {
                 return redirect()->route('teacher.menu');
             }
 
@@ -49,29 +53,26 @@ class AuthController extends Controller
         return redirect('/login');
     }
 
-    // Menampilkan halaman form register
-    public function register()
-    {
-        return view('register'); // Buat file register.blade.php nanti
+    public function showChangePasswordForm()
+{
+    return view('auth.change_password');
+}
+
+public function updatePassword(Request $request)
+{
+    $request->validate([
+        'password' => 'required|min:6|confirmed', // 'confirmed' artinya butuh input password_confirmation
+    ]);
+
+    $user = Auth::user();
+    $user->password = Hash::make($request->password);
+    $user->is_password_changed = true; // Tandai sudah ganti password
+    $user->save();
+
+    // Setelah ganti, lempar ke dashboard masing-masing
+    if ($user->role === 'teacher') {
+        return redirect()->route('teacher.menu')->with('success', 'Password berhasil diperbarui!');
     }
-
-    // Memproses data pendaftaran
-    public function storeRegister(Request $request)
-    {
-        $validated = $request->validate([
-            'name' => 'required|string|max:255',
-            'email' => 'required|email|unique:users',
-            'password' => 'required|min:6'
-        ]);
-
-        // Simpan ke database (otomatis jadi real user)
-        \App\Models\User::create([
-            'name' => $validated['name'],
-            'email' => $validated['email'],
-            'password' => bcrypt($validated['password']),
-            'role' => 'student', // Default pendaftar public adalah student
-        ]);
-
-        return redirect('/login')->with('success', 'Registrasi berhasil! Silakan login.');
+    return redirect()->route('student.home')->with('success', 'Password berhasil diperbarui!');
     }
 }

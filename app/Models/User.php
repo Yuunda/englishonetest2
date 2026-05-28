@@ -23,6 +23,8 @@ class User extends Authenticatable
         'password',
         'role',
         'level',
+        'assigned_class',   // Contoh: 'Class A', 'Class B' (untuk teacher)
+        'is_password_changed',
     ];
 
     /**
@@ -53,5 +55,15 @@ class User extends Authenticatable
         return $this->hasMany(Submission::class);
     }
 
-    
+    // Di dalam class User
+    public function getAssignedLevelsAttribute()
+    {
+        // Mengembalikan array dari string (contoh: "elementary,middle" -> ['elementary', 'middle'])
+        return $this->assigned_class ? explode(',', $this->assigned_class) : [];
+    }
+
+    public function hasAccess($level)
+    {
+        return in_array($level, $this->assignedLevels);
+    }
 }

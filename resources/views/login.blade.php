@@ -27,18 +27,6 @@
     <div class="container d-flex justify-content-center align-items-center flex-grow-1" style="min-height: 80vh;">
         <div class="card login-card border-0 shadow p-4">
             <h2 class="text-info fw-bold text-center">Login to EnglishONE</h2>
-           <p class="text-center small">belum punya akun? <a href="{{ route('register') }}" class="text-danger fw-bold text-decoration-none">Daftar</a></p>
-
-            <a href="{{ url('auth/google') }}" class="btn bg-light-grey w-100 mb-2 fw-bold d-flex align-items-center justify-content-center">
-                <img src="https://cdn-icons-png.flaticon.com/512/2991/2991148.png" width="20" class="me-2">
-                Login with Google Account
-            </a>
-
-            <div class="d-flex align-items-center mb-4">
-                <div class="flex-grow-1 border-bottom border-info" style="height: 1px;"></div>
-                <span class="mx-2 fw-bold text-info">OR</span>
-                <div class="flex-grow-1 border-bottom border-info" style="height: 1px;"></div>
-            </div>
 
             @if($errors->any())
                 <div class="alert alert-danger py-2 small">{{ $errors->first() }}</div>
@@ -59,6 +47,5 @@
             </form>
         </div>
     </div>
-
 </body>
 </html>

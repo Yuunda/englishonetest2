@@ -29,12 +29,13 @@
             <div style="margin-bottom: 15px;">
                 <label>Level:</label><br>
                 <select name="level" style="width: 100%; padding: 8px;" required>
-                    <option value="kinder">Kinder</option>
-                    <option value="elementary">Elementary</option>
-                    <option value="middle">Middle</option>
-                    <option value="high">High</option>
-                    <option value="adult">Adult</option>
-                </select>
+                <option value="">-- Select Level --</option>
+                @foreach(['kinder', 'elementary', 'middle', 'high', 'adult'] as $level)
+                    @if(auth()->user()->hasAccess($level))
+                        <option value="{{ $level }}">{{ ucfirst($level) }}</option>
+                    @endif
+                @endforeach
+            </select>
             </div>
 
             <div style="margin-bottom: 15px;">

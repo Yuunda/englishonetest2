@@ -57,6 +57,25 @@
             margin-top: 30px; 
             padding: 20px; 
         }
+
+        .change-pw-btn { 
+    color: #0077a3; /* Warna biru */
+    font-weight: 800; 
+    border: 2px solid #0077a3; 
+    background: white; 
+    cursor: pointer; 
+    padding: 8px 20px;
+    border-radius: 8px;
+    text-decoration: none; /* Biar link gak ada garis bawah */
+    font-size: 0.8rem;
+    transition: all 0.3s ease; 
+    margin-right: 10px; /* Kasih jarak sama tombol logout */
+}
+.change-pw-btn:hover { 
+    background: #0077a3; 
+    color: white; 
+    box-shadow: 0 4px 10px rgba(0,0,0,0.2);
+}
     </style>
 </head>
 <body>
@@ -78,6 +97,8 @@
         </div>
         
         <div class="d-flex align-items-center">
+            <a href="{{ route('password.change') }}" class="change-pw-btn">CHANGE PASSWORD</a>
+
             <form action="{{ route('logout') }}" method="POST" class="m-0">
                 @csrf
                 <button type="submit" class="logout-btn">LOGOUT</button>
